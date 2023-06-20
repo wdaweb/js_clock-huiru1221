@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+
+            margin: 0;
+            background-image: url("./images/flowers.jpg");
+            background-size: 100vw 100vh;
+            background-repeat: no-repeat;
+        }
+
+        #clock {
+            /* background: black; */
+            width: 300px;
+            height: 300px;
+            margin: auto;
+            position: relative;
+            border-radius: 50%;
+            top: calc(50% - 150px);
+            display: block;
+            cursor: pointer;
+        }
+
+        #daisy {
+            position: absolute;
+            left: calc(50% - 150px);
+
+        }
+
+
+        #hour {
+            width: 40%;
+            height: 26px;
+            /* background-color: aquamarine; */
+            background-image: url("./images/hour.png");
+            position: absolute;
+            top: calc(50% - 13px);
+            left: 10%;
+            border-radius: 5px;
+            transform-origin: right center;
+        }
+
+        #minute {
+            width: 40%;
+            height: 26px;
+            /* background-color: cyan; */
+            background-image: url("./images/minute.png");
+            position: absolute;
+            top: calc(50% - 13px);
+            left: 10%;
+            border-radius: 5px;
+            transform-origin: right center;
+        }
+
+        #second {
+            width: 45%;
+            height: 10px;
+            /* background-color: lightskyblue; */
+            position: absolute;
+            top: calc(50% - 5px);
+            left: 5%;
+            border-radius: 5px;
+            transform-origin: right center;
+        }
+
+        #numberC {
+            font-size: 80px;
+            color: white;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-weight: bold;
+            text-align: center;
+
+        }
+
+
+
+        #myboot {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <img id="daisy" src="./images/22.png">
+    <div id="clock">
+        <div id="hour"></div>
+        <div id="minute"></div>
+        <div id="second"></div>
+    </div>
+    <div id="numberC"></div>
+
+    <div id="myboot"><audio id="mp3" controls="controls" volume="0.1" autoplay></audio></div>
+
+
+    <script>
+        const hour = document.getElementById('hour')
+        const minute = document.getElementById('minute')
+        const second = document.getElementById('second')
+        const daisy = document.querySelector('#daisy')
+        const numberC = document.getElementById('numberC')
+        const musics = document.querySelectorAll('.music')
+        const clocks = document.getElementById('clock')
+
+        const clock = () => {
+            const date = new Date()
+            hour.style.transform = `rotate(${date.getHours() * 30 + 90 + date.getMinutes() * 0.5}deg)`
+            minute.style.transform = `rotate(${date.getMinutes() * 6 + 90}deg)`
+            second.style.transform = `rotate(${date.getSeconds() * 6 + 90}deg)`
+            numberC.innerText = `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`
+        }
+
+        clock()
+        setInterval(clock, 1000)
+
+        setInterval(() => {
+            const date = new Date()
+
+            daisy.style.transform = `rotate(${date.getSeconds() * 6 + date.getMilliseconds() * 0.006}deg)`
+        }, 1000 / 60)
+
+
+        var myAudio = document.getElementById('mp3');
+        window.onload = function () {
+            var arr = [
+                "./music1.mp3",
+                "./music3.mp3",
+                "./music2.mp3"
+            ];
+            myAudio.preload = true;
+            myAudio.controls = true;
+            clocks.addEventListener('click', () => {
+                var a = arr.pop();
+                arr.unshift(a)
+                myAudio.src = a;
+            })
+
+
+            myAudio.addEventListener('ended', playEndedHandler, false);
+            // 如果myAudio播放結束，執行playEndedHandler這個function
+            myAudio.loop = false;//把重覆播放關掉
+            function playEndedHandler() {
+                var a = arr.pop();//移除arr這個陣列最後一個值並放入a中
+                arr.unshift(a)//把剛剛存入的a放入arr陣列中的第一個位置
+                myAudio.src = a;//把myAudio的src改成a
+                myAudio.play();//播放音樂
+            }
+        }
+
+
+
+
+    </script>
+</body>
+
+</html>
